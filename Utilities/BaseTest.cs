@@ -27,7 +27,6 @@ namespace ParaBank_CSharp.Utilities
             Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             Driver.Navigate().GoToUrl("https://parabank.parasoft.com/parabank/index.htm");
             Driver.Manage().Window.Maximize();
-            //Thread.Sleep(2000);
             Utils = new WebUtils(Driver);
         }
 

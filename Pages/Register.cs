@@ -58,14 +58,12 @@ namespace ParaBank_CSharp.Pages
         }
 
 
-        [AllureStep("Register to the application: {0}")]
+        [AllureStep("Register to the application")]
         public void RegisterToApplication(string fname, string lname, string useraddress, string usercity, 
             string userstate, string userzipcode, string userphone, string userssn, string uname, string pwd, string confirmpwd)
 
         {
-            Thread.Sleep(1000);
             utils.ClickOnElement(register_link);
-            Thread.Sleep(1000);
             VerifyTheRegisterPage();
             utils.EnterTextInField(first_name, fname);
             utils.EnterTextInField(last_name, lname);
@@ -78,9 +76,8 @@ namespace ParaBank_CSharp.Pages
             utils.EnterTextInField(username, uname);
             utils.EnterTextInField(password, pwd);
             utils.EnterTextInField(confirm, confirmpwd);
-            TestDataGenerator.AttachScreenshot(driver, "RegisterPageFilled");
+            TestDataGenerator.AttachScreenshot(driver, "Form Filled: Registration");
             utils.ClickOnElement(register_button);
-            //return (fname, uname);
         }
     }
 }

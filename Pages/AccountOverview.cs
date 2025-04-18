@@ -66,8 +66,6 @@ namespace ParaBank_CSharp.Pages
                        TestDataGenerator.CompareCurrencyWithNumber(actualBalance, Convert.ToString(balance)) &&
                        TestDataGenerator.CompareCurrencyWithNumber(actualAvailable, Convert.ToString(availableBalance));
             }
-
-            //AttachScreenshot("Account Details Not Visible");
             return false;
         }
 
@@ -104,15 +102,11 @@ namespace ParaBank_CSharp.Pages
                 string desc = utils.GetTextFromElement(TransactionDetailField("Description"));
                 string type = utils.GetTextFromElement(TransactionDetailField("Type"));
                 string amt = utils.GetTextFromElement(TransactionDetailField("Amount"));
-
-                //AllureLifecycle.Instance.AddAttachment("Transaction Details", "text/plain", Encoding.UTF8.GetBytes(details));
-
                 return desc.Contains(transaction) &&
                        type == transactionType &&
                        TestDataGenerator.CompareCurrencyWithNumber(amt, amount);
             }
 
-            //AttachScreenshot("Transaction Details Not Visible");
             return false;
         }
 

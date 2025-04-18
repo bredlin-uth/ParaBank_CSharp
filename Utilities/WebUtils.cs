@@ -22,7 +22,7 @@ namespace ParaBank_CSharp.Utilities
             js = (IJavaScriptExecutor)driver;
         }
 
-        [AllureStep("Click on element: {0}")]
+        [AllureStep("Click on element: {locator}")]
         public void ClickOnElement(By locator)
         {
             try
@@ -36,7 +36,7 @@ namespace ParaBank_CSharp.Utilities
             }
         }
 
-        [AllureStep("Enter text '{1}' into field: {0}")]
+        [AllureStep("Enter text '{value}' into field: {locator}")]
         public void EnterTextInField(By locator, string value)
         {
             try
@@ -52,34 +52,44 @@ namespace ParaBank_CSharp.Utilities
             }
         }
 
-        [AllureStep("Check if element is visible: {0}")]
+        [AllureStep("Check if element is visible: {locator}")]
         public bool IsElementVisible(By locator)
         {
             try
             {
-                return wait.Until(ExpectedConditions.ElementIsVisible(locator)).Displayed;
+                bool visible = wait.Until(ExpectedConditions.ElementIsVisible(locator)).Displayed;
+
+                // Attach screenshot when element is visible
+                TestDataGenerator.AttachScreenshot(driver, $"Element visible: {locator}");
+
+                Console.WriteLine($"Element {locator} visibility: {visible}");
+                return visible;
             }
             catch (WebDriverTimeoutException)
             {
+                // Attach screenshot when element is not visible (timeout)
+                TestDataGenerator.AttachScreenshot(driver, $"Element NOT visible: {locator}");
+
+                Console.WriteLine($"Element {locator} is not visible.");
                 return false;
             }
         }
 
-        [AllureStep("Wait until element is visible: {0}")]
+        [AllureStep("Wait until element is visible: {locator}")]
         public IWebElement WaitUntilElementIsVisible(By locator, int timeoutInSeconds = 10)
         {
             var localWait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
             return localWait.Until(ExpectedConditions.ElementIsVisible(locator));
         }
 
-        [AllureStep("Scroll to web element: {0}")]
+        [AllureStep("Scroll to web element: {locator}")]
         public void ScrollToWebElement(By locator)
         {
             var element = driver.FindElement(locator);
             js.ExecuteScript("arguments[0].scrollIntoView(true);", element);
         }
 
-        [AllureStep("Get text from element: {0}")]
+        [AllureStep("Get text from element: {locator}")]
         public string GetTextFromElement(By locator)
         {
             try
@@ -98,7 +108,7 @@ namespace ParaBank_CSharp.Utilities
             driver.Navigate().Back();
         }
 
-        [AllureStep("Select '{1}' from dropdown: {0}")]
+        [AllureStep("Select '{text}' from dropdown: {locator}")]
         public void SelectByVisibleText(By locator, string text)
         {
             var element = wait.Until(ExpectedConditions.ElementIsVisible(locator));
@@ -106,7 +116,7 @@ namespace ParaBank_CSharp.Utilities
             selectElement.SelectByText(text);
         }
 
-        [AllureStep("Select value '{1}' from dropdown: {0}")]
+        [AllureStep("Select value '{value}' from dropdown: {locator}")]
         public void SelectByValue(By locator, string value)
         {
             var element = wait.Until(ExpectedConditions.ElementIsVisible(locator));
@@ -114,7 +124,7 @@ namespace ParaBank_CSharp.Utilities
             selectElement.SelectByValue(value);
         }
 
-        [AllureStep("Select index '{1}' from dropdown: {0}")]
+        [AllureStep("Select index '{index}' from dropdown: {locator}")]
         public void SelectByIndex(By locator, int index)
         {
             var element = wait.Until(ExpectedConditions.ElementIsVisible(locator));
@@ -122,7 +132,7 @@ namespace ParaBank_CSharp.Utilities
             selectElement.SelectByIndex(index);
         }
 
-        [AllureStep("Get values from dropdown: {0}")]
+        [AllureStep("Get values from dropdown: {locator}")]
         public List<string> GetValuesFromDropdown(By locator)
         {
             var element = wait.Until(ExpectedConditions.ElementIsVisible(locator));

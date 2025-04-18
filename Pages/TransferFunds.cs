@@ -52,13 +52,6 @@ namespace ParaBank_CSharp.Pages
             return (fromOptions[0], toOptions[0]);
         }
 
-        private string SelectAccount(By locator)
-        {
-            var fromOptions = utils.GetValuesFromDropdown(locator);
-            utils.SelectByValue(locator, fromOptions[0]);
-            return fromOptions[0];
-        }
-
         [AllureStep("Fill and submit transfer funds form")]
         public (string fromAccount, string toAccount) FundTransfer(string amount)
         {

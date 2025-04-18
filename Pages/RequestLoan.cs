@@ -65,8 +65,7 @@ namespace ParaBank_CSharp.Pages
         [AllureStep("Verify loan request completion")]
         public bool VerifyLoanRequestComplete()
         {
-            Thread.Sleep(5000); // Ideally use explicit wait
-
+            Thread.Sleep(5000);
             if (utils.IsElementVisible(loanRequestProcessedTxt))
             {
                 string providerInfo = utils.GetTextFromElement(loanProviderInfoTxt);

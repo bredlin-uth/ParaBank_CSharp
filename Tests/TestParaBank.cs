@@ -2,6 +2,7 @@ using Allure.NUnit.Attributes;
 using ParaBank_CSharp.Pages;
 using ParaBank_CSharp.Utilities;
 
+
 namespace ParaBank_CSharp.Tests
 {
     [TestFixture]
@@ -29,22 +30,43 @@ namespace ParaBank_CSharp.Tests
                 userData["pwd1"]
             );
 
-            // Verification: Verify registration success
             AccountServices accountServicesPage = new AccountServices(Driver, Utils);
             Assert.IsTrue(accountServicesPage.VerifyAccountIsRegistered(userData["uname"]));
 
-            // Log out
             accountServicesPage.LogOutFromApplication();
         }
 
         [Test, Order(2)]
         [AllureStep("Login To Application")]
-        public void LoginToTheParaBankApplication()
+        public void TestLoginToTheParaBankApplication()
         {
             Login loginpage = new Login(Driver, Utils);
             loginpage.LoginToApplication(userData["uname"], userData["pwd"]);
             AccountServices accountServicesPage = new AccountServices(Driver, Utils);
             Assert.IsTrue(accountServicesPage.VerifyAccountIsLoggedIn(userData["fname"]));
+        }
+
+        [Test, Order(3)]
+        [AllureStep("Open New Account")]
+        public void TestOpenNewAccount()
+        {
+            OpenNewAccount accountDetailsPage = new OpenNewAccount(Driver, Utils);
+            AccountOverview accountOverviewPage = new AccountOverview(Driver, Utils);
+            AccountServices accountServicesPage = new AccountServices(Driver, Utils);
+
+            foreach (var accountType in new[] { "CHECKING", "SAVINGS" })
+            {
+                accountServicesPage.NavigateToAccountService("Open New Account");
+                accountDetailsPage.OpenAccount(accountType);
+                Assert.IsTrue(accountServicesPage.VerifyNewAccountOpening(accountType));
+
+                var newAccountNumber = accountDetailsPage.GetNewlyCreatedAccountNumber();
+                accountServicesPage.NavigateToAccountService("Accounts Overview");
+                Assert.IsTrue(accountOverviewPage.VerifyAndClickAccountNumber(newAccountNumber));
+
+                accountOverviewPage.VerifyAccountDetails(newAccountNumber, accountType, 100, 100);
+            }
+
         }
 
         [Test, Order(4)]
@@ -111,4 +133,5 @@ namespace ParaBank_CSharp.Tests
         }
 
     }
+ 
 }
