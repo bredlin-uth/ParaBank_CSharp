@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Allure.Net.Commons;
@@ -47,15 +48,7 @@ namespace ParaBank_CSharp.Pages
             {
                 string statusOfRegister = utils.GetTextFromElement(registerSuccessMsg);
                 string usernameResult = utils.GetTextFromElement(registerUsernameMsg);
-
-                //AllureLifecycle.Instance.WrapInStep(() =>
-                //{
-                //    AllureLifecycle.Instance.AddAttachment(
-                //        "Registration Message",
-                //        "text/plain",
-                //        Encoding.UTF8.GetBytes(statusOfRegister)
-                //    );
-                //}, $"Verify account is registered: {statusOfRegister}");
+                TestDataGenerator.AttachText("Verify account is registered", $"Verify account is registered: {statusOfRegister}");
 
                 return usernameResult.Contains(uname);
             }
@@ -75,15 +68,7 @@ namespace ParaBank_CSharp.Pages
             if (utils.IsElementVisible(loginSuccessMsg))
             {
                 string loginMessage = utils.GetTextFromElement(loginSuccessMsg);
-
-                //AllureLifecycle.Instance.WrapInStep(() =>
-                //{
-                //    AllureLifecycle.Instance.AddAttachment(
-                //        "Login Message",
-                //        "text/plain",
-                //        Encoding.UTF8.GetBytes(loginMessage)
-                //    );
-                //}, $"Verify account is logged in: {loginMessage}");
+                TestDataGenerator.AttachText("Verify account Log in", $"Verify account is logged in: {loginMessage}");
 
                 return loginMessage.Contains(fname);
             }
@@ -98,14 +83,7 @@ namespace ParaBank_CSharp.Pages
             {
                 string openingStatus = utils.GetTextFromElement(accountOpenedSuccessMsg);
 
-                //AllureLifecycle.Instance.WrapInStep(() =>
-                //{
-                //    AllureLifecycle.Instance.AddAttachment(
-                //        "New Account Opening Message",
-                //        "text/plain",
-                //        Encoding.UTF8.GetBytes(openingStatus)
-                //    );
-                //}, $"Verify new {typeOfAccount} account is opened: {openingStatus}");
+                TestDataGenerator.AttachText("open account status", $"Verify new {typeOfAccount} account is opened: {openingStatus}");
 
                 return true;
             }

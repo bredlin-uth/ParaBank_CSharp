@@ -47,12 +47,38 @@ namespace ParaBank_CSharp.Tests
 
         [Test, Order(2)]
         [AllureStep("Login To Application")]
-        public void LoginToTheParaBankApplication()
+        public void TestLoginToTheParaBankApplication()
         {
             Login loginpage = new Login(Driver, Utils);
             loginpage.LoginToApplication(userData["uname"], userData["pwd"]);
             AccountServices accountServicesPage = new AccountServices(Driver, Utils);
             Assert.IsTrue(accountServicesPage.VerifyAccountIsLoggedIn(userData["fname"]));
         }
+
+        [Test, Order(3)]
+        [AllureStep("Open New Account")]
+
+        public void TestOpenNewAccount()
+        {
+            OpenNewAccount accountDetailsPage = new OpenNewAccount(Driver, Utils);
+            AccountOverview accountOverviewPage = new AccountOverview(Driver, Utils);
+            AccountServices accountServicesPage = new AccountServices(Driver, Utils);
+
+            foreach (var accountType in new[] { "CHECKING", "SAVINGS" })
+            {
+                accountServicesPage.NavigateToAccountService("Open New Account");
+                accountDetailsPage.OpenAccount(accountType);
+                Assert.IsTrue(accountServicesPage.VerifyNewAccountOpening(accountType));
+
+                var newAccountNumber = accountDetailsPage.GetNewlyCreatedAccountNumber();
+                accountServicesPage.NavigateToAccountService("Accounts Overview");
+                //Assert.IsTrue(accountOverviewPage.VerifyAndClickAccountNumber(newAccountNumber));
+
+                //accountOverviewPage.VerifyAccountDetails(newAccountNumber, accountType, 100, 100);
+            }
+
+        }
+
     }
+ 
 }

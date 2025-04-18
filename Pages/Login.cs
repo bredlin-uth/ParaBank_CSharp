@@ -20,7 +20,7 @@ namespace ParaBank_CSharp.Pages
         private readonly By loginButton = By.XPath("//div[@class='login']/input[@value='Log In']");
 
 
-        //[AllureStep("Login to the application with username and password: {0}")]
+        [AllureStep("Login to the application")]
         public void LoginToApplication(string username, string password)
         {
             utils.EnterTextInField(usernameField, username);
