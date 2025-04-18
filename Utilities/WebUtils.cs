@@ -10,7 +10,6 @@ using Allure.NUnit;
 
 namespace ParaBank_CSharp.Utilities
 {
-    [AllureNUnit]
     public class WebUtils
     {
         private readonly IWebDriver driver;

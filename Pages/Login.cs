@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using Allure.NUnit.Attributes;
 using ParaBank_CSharp.Utilities;
+
 namespace ParaBank_CSharp.Pages
 {
     public class Login
@@ -19,7 +20,7 @@ namespace ParaBank_CSharp.Pages
         private readonly By loginButton = By.XPath("//div[@class='login']/input[@value='Log In']");
 
 
-        [AllureStep("Login to the application with username: {0}")]
+        //[AllureStep("Login to the application with username and password: {0}")]
         public void LoginToApplication(string username, string password)
         {
             utils.EnterTextInField(usernameField, username);

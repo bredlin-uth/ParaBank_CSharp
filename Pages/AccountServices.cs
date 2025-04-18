@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Allure.Net.Commons;
+using Allure.NUnit.Attributes;
 using OpenQA.Selenium;
 using ParaBank_CSharp.Utilities;
 
@@ -18,6 +20,96 @@ namespace ParaBank_CSharp.Pages
             this.driver = driver;
             this.utils = utils;
 
+        }
+
+        private readonly By logOutLnk = By.LinkText("Log Out");
+        private readonly By registerSuccessMsg = By.XPath("//div[@id='rightPanel']");
+        private readonly By registerUsernameMsg = By.XPath("//div[@id='rightPanel']/h1[@class='title']");
+        private readonly By loginSuccessMsg = By.XPath("//p[@class='smallText']");
+        private readonly By accountOpenedSuccessMsg = By.XPath("//div[@id='openAccountResult']");
+
+        private By AccountService(string service)
+        {
+            return By.XPath($"//a[contains(text(),'{service}')]");
+        }
+
+        [AllureStep("Navigate to the account service: {0}")]
+        public void NavigateToAccountService(string service)
+        {
+            utils.ClickOnElement(AccountService(service));
+        }
+
+        [AllureStep("Verify account is registered with username: {0}")]
+        public bool VerifyAccountIsRegistered(string uname)
+        {
+            Thread.Sleep(3000);
+            if (utils.IsElementVisible(registerSuccessMsg))
+            {
+                string statusOfRegister = utils.GetTextFromElement(registerSuccessMsg);
+                string usernameResult = utils.GetTextFromElement(registerUsernameMsg);
+
+                //AllureLifecycle.Instance.WrapInStep(() =>
+                //{
+                //    AllureLifecycle.Instance.AddAttachment(
+                //        "Registration Message",
+                //        "text/plain",
+                //        Encoding.UTF8.GetBytes(statusOfRegister)
+                //    );
+                //}, $"Verify account is registered: {statusOfRegister}");
+
+                return usernameResult.Contains(uname);
+            }
+            return false;
+        }
+
+        [AllureStep("Log out from application")]
+        public void LogOutFromApplication()
+        {
+            utils.ClickOnElement(logOutLnk);
+        }
+
+        [AllureStep("Verify account is logged in with first name: {0}")]
+        public bool VerifyAccountIsLoggedIn(string fname)
+        {
+            Thread.Sleep(3000);
+            if (utils.IsElementVisible(loginSuccessMsg))
+            {
+                string loginMessage = utils.GetTextFromElement(loginSuccessMsg);
+
+                //AllureLifecycle.Instance.WrapInStep(() =>
+                //{
+                //    AllureLifecycle.Instance.AddAttachment(
+                //        "Login Message",
+                //        "text/plain",
+                //        Encoding.UTF8.GetBytes(loginMessage)
+                //    );
+                //}, $"Verify account is logged in: {loginMessage}");
+
+                return loginMessage.Contains(fname);
+            }
+            return false;
+        }
+
+        [AllureStep("Verify new {0} account is opened")]
+        public bool VerifyNewAccountOpening(string typeOfAccount)
+        {
+            Thread.Sleep(3000);
+            if (utils.IsElementVisible(accountOpenedSuccessMsg))
+            {
+                string openingStatus = utils.GetTextFromElement(accountOpenedSuccessMsg);
+
+                //AllureLifecycle.Instance.WrapInStep(() =>
+                //{
+                //    AllureLifecycle.Instance.AddAttachment(
+                //        "New Account Opening Message",
+                //        "text/plain",
+                //        Encoding.UTF8.GetBytes(openingStatus)
+                //    );
+                //}, $"Verify new {typeOfAccount} account is opened: {openingStatus}");
+
+                return true;
+            }
+            return false;
         }
     }
 }

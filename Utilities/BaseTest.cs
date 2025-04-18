@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Allure.Net.Commons;
+using Allure.NUnit;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace ParaBank_CSharp.Utilities
 {
     [TestFixture]
+    [AllureNUnit]
     public class BaseTest
     {
         protected IWebDriver Driver { get; private set; }
         public WebUtils Utils { get; private set; }
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             AllureLifecycle.Instance.CleanupResultDirectory();
@@ -25,10 +27,11 @@ namespace ParaBank_CSharp.Utilities
             Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             Driver.Navigate().GoToUrl("https://parabank.parasoft.com/parabank/index.htm");
             Driver.Manage().Window.Maximize();
+            //Thread.Sleep(2000);
             Utils = new WebUtils(Driver);
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void Teardown()
         {
             Driver?.Quit();
