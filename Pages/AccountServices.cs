@@ -42,7 +42,6 @@ namespace ParaBank_CSharp.Pages
         [AllureStep("Verify account is registered with username: {0}")]
         public bool VerifyAccountIsRegistered(string uname)
         {
-            Thread.Sleep(3000);
             if (utils.IsElementVisible(registerSuccessMsg))
             {
                 string statusOfRegister = utils.GetTextFromElement(registerSuccessMsg);

@@ -39,10 +39,6 @@ namespace ParaBank_CSharp.Pages
         public bool VerifyTransferFundsPage()
         {
             bool status = utils.IsElementVisible(transferFundsTxt);
-            if (!status)
-            {
-                AttachScreenshot("Transfer Funds Page - Not Visible");
-            }
             return status;
         }
 
@@ -56,13 +52,20 @@ namespace ParaBank_CSharp.Pages
             return (fromOptions[0], toOptions[0]);
         }
 
+        private string SelectAccount(By locator)
+        {
+            var fromOptions = utils.GetValuesFromDropdown(locator);
+            utils.SelectByValue(locator, fromOptions[0]);
+            return fromOptions[0];
+        }
+
         [AllureStep("Fill and submit transfer funds form")]
         public (string fromAccount, string toAccount) FundTransfer(string amount)
         {
             utils.EnterTextInField(amountTb, amount);
             var (fromAccount, toAccount) = SelectFromAndToAccounts();
 
-            AttachScreenshot("Form Filled - Transfer Funds");
+            TestDataGenerator.AttachScreenshot(driver, "Form Filled - Transfer Funds");
             utils.ClickOnElement(transferBtn);
 
             return (fromAccount, toAccount);
@@ -71,7 +74,7 @@ namespace ParaBank_CSharp.Pages
         [AllureStep("Verify fund transfer completion")]
         public bool VerifyTransferComplete(string amount, string fromAccount, string toAccount)
         {
-            Thread.Sleep(3000); // Ideally use WebDriverWait
+            Thread.Sleep(3000);
 
             if (utils.IsElementVisible(transferCompleteTxt))
             {
@@ -79,15 +82,8 @@ namespace ParaBank_CSharp.Pages
                 string fromResult = utils.GetTextFromElement(fromAccountIdResultTxt);
                 string toResult = utils.GetTextFromElement(toAccountIdResultTxt);
                 string successMessage = utils.GetTextFromElement(transferredSuccessMsg);
-
-                AllureLifecycle.Instance.WrapInStep(() =>
-                {
-                    AllureLifecycle.Instance.AddAttachment(
-                        "Transfer Result",
-                        "text/plain",
-                        System.Text.Encoding.UTF8.GetBytes(successMessage)
-                    );
-                }, "Transfer Success Message");
+                
+                TestDataGenerator.AttachText("Transfer Success Message", successMessage);
 
                 return resultAmount.Contains(amount) && fromResult == fromAccount && toResult == toAccount;
             }

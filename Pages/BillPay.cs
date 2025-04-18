@@ -44,10 +44,6 @@ namespace ParaBank_CSharp.Pages
         public bool VerifyBillPayPage()
         {
             bool status = utils.IsElementVisible(billPaymentServiceTxt);
-            if (!status)
-            {
-                AttachScreenshot("Bill Pay Page - Not Visible");
-            }
             return status;
         }
 
@@ -74,7 +70,7 @@ namespace ParaBank_CSharp.Pages
             string fromAccount = SelectFromAccount();
             utils.SelectByVisibleText(fromAccountDd, fromAccount);
 
-            AttachScreenshot("Form Filled - Bill Pay");
+            TestDataGenerator.AttachScreenshot(driver, "Form Filled - Bill Pay");
             utils.ClickOnElement(sendPaymentBtn);
 
             return fromAccount;
@@ -83,7 +79,7 @@ namespace ParaBank_CSharp.Pages
         [AllureStep("Verify transfer completion")]
         public bool VerifyTransferComplete(string name, string amount, string fromAccount)
         {
-            Thread.Sleep(3000); // Replace with proper wait if needed
+            Thread.Sleep(3000); 
             if (utils.IsElementVisible(billPaymentCompleteTxt))
             {
                 string nameResult = utils.GetTextFromElement(payeeNameTxt);
@@ -91,9 +87,9 @@ namespace ParaBank_CSharp.Pages
                 string fromAccountResult = utils.GetTextFromElement(fromAccountIdTxt);
                 string successMessage = utils.GetTextFromElement(billPaymentSuccessMsg);
 
-                AllureLifecycle.Instance.WrapInStep(() => { }, successMessage);
+                TestDataGenerator.AttachText("Success Message", successMessage);
 
-                return nameResult == name && fromAccountResult == fromAccount && amountResult.Contains(amount);
+                return nameResult == name && fromAccountResult == fromAccount && amountResult.Contains(amount) && TestDataGenerator.CompareCurrencyWithNumber(amountResult, amount);
             }
             return false;
         }

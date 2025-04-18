@@ -41,10 +41,6 @@ namespace ParaBank_CSharp.Pages
         public bool VerifyRequestLoanPage()
         {
             bool status = utils.IsElementVisible(applyForALoanTxt);
-            if (!status)
-            {
-                AttachScreenshot("Request Loan Page - Not Visible");
-            }
             return status;
         }
 
@@ -61,7 +57,7 @@ namespace ParaBank_CSharp.Pages
             utils.EnterTextInField(loanAmountTb, amount);
             utils.EnterTextInField(downPaymentTb, downPayment);
             string fromAccount = SelectFromAccount();
-            AttachScreenshot("Form Filled - Request Loan");
+            TestDataGenerator.AttachScreenshot(driver, "Form Filled - Request Loan");
             utils.ClickOnElement(applyNowBtn);
             return fromAccount;
         }
@@ -77,22 +73,21 @@ namespace ParaBank_CSharp.Pages
                 string dateInfo = utils.GetTextFromElement(loanDateInfoTxt);
                 string statusInfo = utils.GetTextFromElement(loanStatusInfoTxt);
 
-                if (statusInfo.Contains("Denied"))
-                    return false;
-
-                string transferredSuccess = utils.GetTextFromElement(loanRequestApprovedTxt);
-                string combinedInfo = string.Join("\n", providerInfo, dateInfo, statusInfo, transferredSuccess);
-
-                AllureLifecycle.Instance.WrapInStep(() =>
+                if (statusInfo.Contains("Denied")) 
                 {
-                    AllureLifecycle.Instance.AddAttachment(
-                        "Request Loan Details",
-                        "text/plain",
-                        System.Text.Encoding.UTF8.GetBytes(combinedInfo)
-                    );
-                }, "Loan Request Verification");
+                    TestDataGenerator.AttachText("Loan Request Verification", $"Loan Request Verification: {statusInfo}");
+                    return false;
+                }
+                else
+                {
+                    string transferredSuccess = utils.GetTextFromElement(loanRequestApprovedTxt);
+                    string combinedInfo = string.Join("\n", providerInfo, dateInfo, statusInfo, transferredSuccess);
 
-                return true;
+                    TestDataGenerator.AttachText("Loan Request Verification", combinedInfo);
+
+                    return true;
+                 }
+                
             }
 
             return false;
