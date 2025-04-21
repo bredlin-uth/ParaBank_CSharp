@@ -9,6 +9,9 @@ namespace ParaBank_CSharp.Tests
     public class Tests_ParaBank : BaseTest 
     {
         Dictionary<string, string>? userData;
+        Dictionary<string, string>? updateuserData;
+        private string transactionId;
+        private string transactionAmount;
 
         [Test, Order(1)]
         [AllureStep("Register To Application")]
@@ -130,6 +133,83 @@ namespace ParaBank_CSharp.Tests
             Assert.IsTrue(accountOverviewPage.VerifyAndClickAccountNumber(fromAccount));
             accountOverviewPage.ClickTransaction("2", "Down Payment");
             accountOverviewPage.VerifyTransactionDetails("Down Payment for Loan", "Debit", "2");
+        }
+        // Transaction Tests
+        [Test, Order(7)]
+        [AllureStep("Find Transaction Date")]
+        public void TestFindTransactionDate()
+        {
+            FindTransactions findTransactions = new FindTransactions(Driver, Utils);
+            string transactionDate = DateTime.Now.ToString("MM-dd-yyyy");
+            var transactionDetails = findTransactions.FindTransactionInMultipleWays(
+                "find_transaction_date", transactionDate);
+
+            transactionId = transactionDetails.Item1;
+            transactionAmount = transactionDetails.Item2;
+        }
+
+        [Test, Order(8)]
+        [AllureStep("Find Transaction ID")]
+        public void TestFindTransactionId()
+        {
+            FindTransactions findTransactions = new FindTransactions(Driver, Utils);
+            if (!string.IsNullOrEmpty(transactionId))
+            {
+                findTransactions.FindTransactionInMultipleWays("find_transaction_id", transactionId);
+            }
+            else
+            {
+                throw new ArgumentException("Give the Transaction ID");
+            }
+        }
+
+        [Test, Order(9)]
+        [AllureStep("Find Transaction Date Range")]
+        public void TestFindTransactionDateRange()
+        {
+            FindTransactions findTransactions = new FindTransactions(Driver, Utils);
+            string transactionDate = DateTime.Now.ToString("MM-dd-yyyy");
+            var transactionDateRange = transactionDate + "," + transactionDate;
+
+            findTransactions.FindTransactionInMultipleWays("find_transaction_daterange", transactionDateRange);
+        }
+
+        [Test, Order(10)]
+        [AllureStep("Find Transaction Amount")]
+        public void TestFindTransactionAmount()
+        {
+            FindTransactions findTransactions = new FindTransactions(Driver, Utils);
+            if (!string.IsNullOrEmpty(transactionAmount))
+            {
+                findTransactions.FindTransactionInMultipleWays("find_transaction_amount", transactionAmount);
+            }
+            else
+            {
+                throw new ArgumentException("Give the Transaction Amount");
+            }
+        }
+
+        [Test, Order(11)]
+        [AllureStep("Login To Application")]
+        public void TestUpdateContactInfo()
+        {
+            updateuserData = TestDataGenerator.GenerateRandomUserForRegistration();
+            foreach (KeyValuePair<string, string> kvp in updateuserData)
+            {
+                Console.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value}");
+            }
+
+            UpdateContactInfo updateContactInfo = new UpdateContactInfo(Driver, Utils);
+            updateContactInfo.UpdateContactInformation(
+                updateuserData["fname"],
+                updateuserData["lname"],
+                updateuserData["address"],
+                updateuserData["city"],
+                updateuserData["state"],
+                updateuserData["zipcode"],
+                updateuserData["phone"]);
+
+
         }
 
     }

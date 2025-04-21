@@ -6,14 +6,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParaBank_CSharp", "ParaBank
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{184262FE-A30A-5FC2-322C-7E9724B90D5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{184262FE-A30A-5FC2-322C-7E9724B90D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{184262FE-A30A-5FC2-322C-7E9724B90D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{184262FE-A30A-5FC2-322C-7E9724B90D5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{184262FE-A30A-5FC2-322C-7E9724B90D5B}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{184262FE-A30A-5FC2-322C-7E9724B90D5B}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
